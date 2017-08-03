@@ -22,7 +22,6 @@ function generatePCMForCharacters(words){
 	let output = [];
 
 	words.split('').forEach(char => {
-		debug(char)
 		output = output.concat(tone(frequencies[char], toneLength, tone.MAX_8));
 	});
 
