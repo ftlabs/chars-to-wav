@@ -26,6 +26,7 @@
     "debug": "^2.6.8",
     "dotenv": "^4.0.0",
     "tonegenerator": "^0.2.1",
-    "waveheader": "0.0.2"
+    "waveheader": "0.0.2",
+    "yargs": "^8.0.2"
   }
 }

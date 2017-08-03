@@ -2,11 +2,9 @@ require('dotenv').config({silent : true});
 const fs = require('fs');
 
 const debug = require('debug')('index');
+const argv = require('yargs').argv
 const tone = require('tonegenerator');
 const waveheader = require('waveheader');
-
-const file = fs.createWriteStream('./output.wav')
-// const samples = [];
 
 const offset = 100;
 const increment = 50;
@@ -28,27 +26,45 @@ function generatePCMForCharacters(words){
 		output = output.concat(tone(frequencies[char], toneLength, tone.MAX_8));
 	});
 
-	return output;
+	return {
+		data : output,
+		chars : words
+	};
 
 }
 
-const PCMData = generatePCMForCharacters('Sean M Tracey');
+function writePCMDataToFile(data, filename){
 
-file.write(waveheader(PCMData.length, {
-  bitDepth: 8
-}));
+	const file = fs.createWriteStream(`./${ argv.output || filename}.wav`);
+	
+	file.write(waveheader(data.length, {
+		bitDepth: 8
+	}));
 
-const rawData = Uint8Array.from(PCMData, function (val) {
-	return val + 128
-});
+	const rawData = Uint8Array.from(data, function (val) {
+		return val + 128;
+	});
 
-let buffer;
+	let buffer;
 
-if (Buffer.from) { // Node 5+ 
-	buffer = Buffer.from(rawData)
+	if (Buffer.from) {
+		buffer = Buffer.from(rawData)
+	} else {
+		buffer = new Buffer(rawData)
+	}
+
+	file.write(buffer)
+	file.end();
+}
+
+const stringToConvert = argv.phrase;
+
+if(stringToConvert){
+
+	const PCMData = generatePCMForCharacters(stringToConvert);
+	writePCMDataToFile(PCMData.data, PCMData.chars);
+
 } else {
-	buffer = new Buffer(rawData)
+	debug('No phrase passed to convert. Exiting...');
+	process.exit();
 }
-
-file.write(buffer)
-file.end();
