@@ -1,32 +1,17 @@
 {
   "name": "chars-to-wav",
-  "version": "0.0.1",
-  "description": "Letters go in, sounds come out",
-  "main": "index.js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ftlabs/chars-to-wav.git"
-  },
-  "keywords": [
-    "wav",
-    "ftlabs",
-    "characters",
-    "FFT"
-  ],
-  "author": "Sean M. Tracey",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ftlabs/chars-to-wav/issues"
-  },
-  "homepage": "https://github.com/ftlabs/chars-to-wav#readme",
   "dependencies": {
-    "debug": "^2.6.8",
-    "dotenv": "^4.0.0",
-    "tonegenerator": "^0.2.1",
-    "waveheader": "0.0.2",
-    "yargs": "^8.0.2"
+    "body-parser": "~1.17.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "express": "~4.15.2",
+    "hbs": "~4.0.1",
+    "morgan": "~1.8.1",
+    "serve-favicon": "~2.4.2"
   }
 }

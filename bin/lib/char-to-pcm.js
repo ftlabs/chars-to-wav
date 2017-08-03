@@ -32,38 +32,38 @@ function generatePCMForCharacters(words){
 
 }
 
+function createBufferFromToneArrays(data){
+
+	const header = waveheader(data.length, {
+		bitDepth: 8
+	});
+
+	const rawData = Buffer.from( Uint8Array.from( data, function (val) {
+		return val + 128;
+	}) );
+
+	const buffer = Buffer.concat( [ header, rawData ] );
+
+	return buffer;
+
+}
+
 function writePCMDataToFile(data, filename){
 
 	const file = fs.createWriteStream(`./${ argv.output || filename}.wav`);
 	
-	file.write(waveheader(data.length, {
-		bitDepth: 8
-	}));
-
-	const rawData = Uint8Array.from(data, function (val) {
-		return val + 128;
-	});
-
-	let buffer;
-
-	if (Buffer.from) {
-		buffer = Buffer.from(rawData)
-	} else {
-		buffer = new Buffer(rawData)
-	}
-
-	file.write(buffer)
+	file.write(data);
 	file.end();
+
 }
 
-const stringToConvert = argv.phrase;
+function convertCharactersToPCMAndReturnBuffer(characters){
 
-if(stringToConvert){
+	const a = createBufferFromToneArrays( generatePCMForCharacters(characters).data );
+	return a;
 
-	const PCMData = generatePCMForCharacters(stringToConvert);
-	writePCMDataToFile(PCMData.data, PCMData.chars);
-
-} else {
-	debug('No phrase passed to convert. Exiting...');
-	process.exit();
 }
+
+module.exports = {
+	generate : convertCharactersToPCMAndReturnBuffer
+};
